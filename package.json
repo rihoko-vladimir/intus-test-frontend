@@ -18,7 +18,12 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@ngrx/store": "^14.3.1",
+    "@svgdotjs/svg.draggable.js": "^3.0.2",
+    "@svgdotjs/svg.js": "^3.1.2",
+    "@svgdotjs/svg.panzoom.js": "^2.1.2",
     "rxjs": "~7.5.0",
+    "svg-pan-zoom": "^3.6.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
