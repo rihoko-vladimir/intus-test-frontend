@@ -6,6 +6,10 @@ import '@svgdotjs/svg.draggable.js'
 import {Rect} from "@svgdotjs/svg.js";
 import {G, Text} from "@svgdotjs/svg.js";
 import {DrawingService} from "../../Services/drawing.service";
+import {HttpClient} from "@angular/common/http";
+import {HttpService} from "../../Services/http.service";
+import { Observable, Subscription} from "rxjs";
+import {RectangleDimensionsRequestResponse} from "src/app/Models/RectangleDimensionsRequestResponse";
 
 
 @Component({
@@ -19,14 +23,27 @@ export class CanvasComponent implements OnInit, OnDestroy {
   rectangle!: Rect;
   groupWithPinButtons!: G;
 
+  private dimensionsSubscription!: Subscription;
+
 
   private perimeterInfo!: Text;
   private draggable!: G;
 
-  constructor(private drawingService: DrawingService) {
+  constructor(private drawingService: DrawingService, private httpService : HttpService) {
   }
 
   ngOnInit(): void {
+    this.dimensionsSubscription = this.httpService.getRectangleDimensions().subscribe(dimensions => {
+      this.initCanvas(dimensions)
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.rectangle.off("dragmove.namespace")
+    this.dimensionsSubscription.unsubscribe()
+  }
+
+  initCanvas(dimensions : RectangleDimensionsRequestResponse){
     const width = "100%"
 
     const height = "100%"
@@ -38,8 +55,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.groupWithPinButtons = SVG().group()
 
     this.rectangle = SVG()
-      .rect(500, 500)
-      .move(32, 32)
+      .rect(dimensions.width, dimensions.height)
+      .move(dimensions.x, dimensions.y)
       .fill('rgba(0,0,0,0.34)')
 
     this.addPerimeterInfoText(this.canvas)
@@ -51,10 +68,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.groupWithPinButtons.add(this.rectangle)
 
     this.canvas.add(this.groupWithPinButtons)
-  }
-
-  ngOnDestroy(): void {
-    this.rectangle.off("dragmove.namespace")
   }
 
 
