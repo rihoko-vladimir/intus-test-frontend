@@ -7,10 +7,10 @@ import {HttpService} from "./http.service";
 
 export class DrawingService {
 
-  constructor(private httpService : HttpService) {
-  }
-
   private resizeGridMargin = 8;
+
+  constructor(private httpService: HttpService) {
+  }
 
   addResizeGrid(element: Rect, addTo: G, groupElement: G, rectangle: Rect, textElement: Text, draggable: G) {
 
@@ -416,7 +416,12 @@ export class DrawingService {
     bottomRightCircle.node.onmousedown = onMouseDown
   }
 
-  private updateDimensions(x : number, y : number, width : number, height : number){
-    this.httpService.postRectangleDimensions({x, y, width, height})
+  private updateDimensions(x: number, y: number, width: number, height: number) {
+    this.httpService.postRectangleDimensions({
+      x: Math.round(x),
+      y: Math.round(y),
+      width: Math.round(width),
+      height: Math.round(height)
+    })
   }
 }

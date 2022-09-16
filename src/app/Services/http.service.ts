@@ -16,5 +16,8 @@ export class HttpService{
 
   postRectangleDimensions(rectangleDimensions : RectangleDimensionsRequestResponse){
     return this.httpClient.post(this.api + "/api/dimensions", rectangleDimensions)
+      .subscribe(_ => {
+        console.log("Saved")
+      })
   }
 }
