@@ -1,10 +1,14 @@
 import {Injectable} from "@angular/core";
 import {Circle, Rect, SVG} from "@svgdotjs/svg.js";
 import {G, Text} from "@svgdotjs/svg.js";
+import {HttpService} from "./http.service";
 
 @Injectable()
 
 export class DrawingService {
+
+  constructor(private httpService : HttpService) {
+  }
 
   private resizeGridMargin = 8;
 
@@ -131,6 +135,12 @@ export class DrawingService {
       // @ts-ignore
       window.removeEventListener("onmousemove", onMouseMove)
       window.onmousemove = null
+
+      const rectWidth = rectangle.node.getBoundingClientRect().width
+      const rectHeight = rectangle.node.getBoundingClientRect().height
+      x = groupElement.x() as number
+      y = groupElement.y() as number
+      this.updateDimensions(x, y, rectWidth, rectHeight)
     }
 
     const onMouseDown = (event: MouseEvent) => {
@@ -209,6 +219,11 @@ export class DrawingService {
       window.removeEventListener("onmousemove", onMouseMove)
       draggable.off("beforedrag dragmove")
       window.onmousemove = null
+      const rectWidth = rectangle.node.getBoundingClientRect().width
+      const rectHeight = rectangle.node.getBoundingClientRect().height
+      x = groupElement.x() as number
+      y = groupElement.y() as number
+      this.updateDimensions(x, y, rectWidth, rectHeight)
     }
 
     const onMouseDown = (event: MouseEvent) => {
@@ -290,6 +305,11 @@ export class DrawingService {
       window.removeEventListener("onmousemove", onMouseMove)
       draggable.off("beforedrag dragmove")
       window.onmousemove = null
+      const rectWidth = rectangle.node.getBoundingClientRect().width
+      const rectHeight = rectangle.node.getBoundingClientRect().height
+      x = groupElement.x() as number
+      y = groupElement.y() as number
+      this.updateDimensions(x, y, rectWidth, rectHeight)
     }
 
     const onMouseDown = (event: MouseEvent) => {
@@ -371,6 +391,11 @@ export class DrawingService {
       window.removeEventListener("onmousemove", onMouseMove)
       draggable.off("beforedrag dragmove")
       window.onmousemove = null
+      const rectWidth = rectangle.node.getBoundingClientRect().width
+      const rectHeight = rectangle.node.getBoundingClientRect().height
+      x = groupElement.x() as number
+      y = groupElement.y() as number
+      this.updateDimensions(x, y, rectWidth, rectHeight)
     }
 
     const onMouseDown = (event: MouseEvent) => {
@@ -389,5 +414,9 @@ export class DrawingService {
     }
 
     bottomRightCircle.node.onmousedown = onMouseDown
+  }
+
+  private updateDimensions(x : number, y : number, width : number, height : number){
+    this.httpService.postRectangleDimensions({x, y, width, height})
   }
 }
